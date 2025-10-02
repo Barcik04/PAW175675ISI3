@@ -1,0 +1,46 @@
+html, :host {
+    line-height: 2;
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+    font-feature-settings: normal;
+    font-variation-settings: normal;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    background-color: hsl(224 71.4% 4.1%);
+}
+
+.header {
+    font-size: 400%;
+    text-align: center;
+    color: azure;
+    background-color: hsl(224 71.4% 4.1%);
+    font-weight: 700;
+}
+
+.button {
+    text-align: center;
+    background-color: hsl(224 71.4% 4.1%);
+    padding: 15px 32px;
+    font-size: 16px;
+    margin: 8px 10px;
+    cursor: pointer;
+    border: none;
+}
+
+.button {
+    color: azure;
+    background-color: hsl(224 71.4% 4.1%);
+}
+
+.divbutton{
+    text-align: center;
+    background-color: hsl(224 71.4% 4.1%);
+}
+
+.center-img {
+  display: block;     
+  margin: 0 auto;        
+}
+
