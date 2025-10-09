@@ -1,0 +1,166 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #0f172a;
+    color: #ffffff;
+}
+
+.navbar {
+    background-color: #1e293b;
+    padding: 15px 0;
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #e2e8f0;
+    font-size: 18px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #38bdf8;
+}
+
+
+header {
+    text-align: center;
+    font-size: 48px;
+    margin-top: 80px;
+}
+
+main div {
+    max-width: 800px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+main img {
+    width: 300px;
+    border-radius: 10px;
+}
+
+main p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-top: 20px;
+}
+
+.contact-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* center horizontally */
+    justify-content: center;   /* center vertically */
+    height: 100vh;             /* full screen height */
+    text-align: center;
+    gap: 20px;                 /* spacing between text and phone div */
+}
+
+.contact-heading {
+    font-size: 32px;
+    font-weight: bold;
+    color: #e2e8f0;
+}
+
+.phone-png1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.phone-png1 img {
+    width: 60px;
+    height: auto;
+}
+
+.phone-png1 p {
+    font-size: 20px;
+    color: #38bdf8;
+    font-weight: 500;
+}
+
+.git-link1 {
+
+    font-size: 20px;
+    color: white;
+    flex-direction: column;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 200px;
+}
+
+.git-img1 {
+    width: 50px;
+    height: 50px;
+    opacity: 0.9;
+    filter: brightness(0) invert(1);
+}
+
+.experience {
+    max-width: 2200px;
+    margin: 80px auto 0;
+    padding: 0 24px;
+    text-align: center;
+}
+
+.experience h1 {
+    font-size: 36px;
+    color: #ffffff;
+    margin-bottom: 24px;
+}
+
+
+.experience-highlight {
+    background: rgba(56, 63, 79, 0.6);
+    border: 1px solid rgba(148,163,184,0.25);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+/* Horizontal list inside the highlight */
+.experience-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    display: flex;
+    gap: 16px 20px;          /* row and column gaps */
+    justify-content: center; /* center items horizontally */
+    align-items: stretch;    /* same height rows */
+}
+
+
+/* Individual items (cards) */
+.exp-item {
+    background: #0f172a;     /* darker inner card */
+    color: #e2e8f0;
+    border: 1px solid rgba(148,163,184,0.15);
+    border-radius: 12px;
+    padding: 14px 18px;
+
+    /* width control: 4 in a row on wide, 2 on medium, 1 on small */
+    flex: 1 1 200px;         /* grow/shrink; base width ~200px */
+    max-width: 340px;
+    /* keeps them compact */
+    text-align: center;
+    font-size: 18px;
+    transition: transform .25s ease, border-color .25s ease;
+}
+
+/*.exp-item:hover {*/
+/*    transform: translateY(-3px);*/
+/*    border-color: rgba(56,189,248,0.5);*/
+/*}*/
+
