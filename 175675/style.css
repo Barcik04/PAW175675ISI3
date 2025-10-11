@@ -6,29 +6,33 @@ body {
 }
 
 .navbar {
+    display: flex;
     background-color: #1e293b;
     padding: 15px 0;
+    justify-content: left;
 }
 
 .navbar ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: flex;
+    list-style: none;
+    padding: 0;
     justify-content: center;
+    margin: 0 0 0 20px;
     gap: 40px;
+    align-items: center;
 }
 
 .navbar a {
+    display: inline-block;
     text-decoration: none;
     color: #e2e8f0;
     font-size: 18px;
     font-weight: bold;
-    transition: color 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 .navbar a:hover {
-    color: #38bdf8;
+    transform: scale(1.1);
 }
 
 
@@ -58,11 +62,11 @@ main p {
 .contact-section {
     display: flex;
     flex-direction: column;
-    align-items: center;       /* center horizontally */
-    justify-content: center;   /* center vertically */
-    height: 100vh;             /* full screen height */
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
     text-align: center;
-    gap: 20px;                 /* spacing between text and phone div */
+    gap: 20px;
 }
 
 .contact-heading {
@@ -129,38 +133,98 @@ main p {
     padding: 24px;
 }
 
-/* Horizontal list inside the highlight */
+
+
 .experience-list {
     list-style: none;
     margin: 0;
     padding: 0;
-
     display: flex;
-    gap: 16px 20px;          /* row and column gaps */
-    justify-content: center; /* center items horizontally */
-    align-items: stretch;    /* same height rows */
+    gap: 16px 20px;
+    justify-content: center;
+    align-items: stretch;
 }
 
 
-/* Individual items (cards) */
+
 .exp-item {
-    background: #0f172a;     /* darker inner card */
+    background: #0f172a;
     color: #e2e8f0;
     border: 1px solid rgba(148,163,184,0.15);
     border-radius: 12px;
-    padding: 14px 18px;
-
-    /* width control: 4 in a row on wide, 2 on medium, 1 on small */
-    flex: 1 1 200px;         /* grow/shrink; base width ~200px */
+    padding: 110px 18px;
+    flex: 1 1 200px;
     max-width: 340px;
-    /* keeps them compact */
     text-align: center;
     font-size: 18px;
-    transition: transform .25s ease, border-color .25s ease;
+    transition: transform 0.3s ease;
 }
 
-/*.exp-item:hover {*/
-/*    transform: translateY(-3px);*/
-/*    border-color: rgba(56,189,248,0.5);*/
-/*}*/
+.exp-item:hover {
+    transform: translateY(-6px);
+}
+
+
+.wrapper-stack {
+    max-width: 2400px;
+    margin: 180px 30px 180px;
+    padding: 0;
+    text-align: center;
+    background: rgba(42, 12, 59, 0.6);
+    border: 1px solid rgba(63, 56, 56, 0.25);
+    border-radius: 16px;
+    display: flex;
+    justify-items: center;
+}
+
+.wrapper-stack img {
+    width: 40px;
+    height: auto;
+    align-items: center;
+}
+
+.wrapper-stack div {
+    margin: 40px auto 40px;
+    background: rgb(12, 4, 33);
+    border-radius: 16px;
+    padding: 100px;
+    border: 1px solid rgba(148,163,184,0.15);
+    transition: transform 0.3s ease;
+}
+
+.wrapper-stack div:hover {
+    transform: scale(1.05);
+}
+
+.wrapper-stack div h2 {
+    font-size: 40px;
+    margin: 0;
+    justify-content: center;
+}
+
+.wrapper-stack div ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    justify-content: center;
+    margin: 10px 0 0;
+    gap: 20px;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+
+.wrapper-stack div ul li {
+    display: flex;
+    background: rgba(42, 12, 59, 0.6);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(63, 56, 56, 0.25);
+    transition: transform 0.3s ease;
+}
+
+.wrapper-stack div ul li:hover {
+    transform: scale(1.15);
+}
 
