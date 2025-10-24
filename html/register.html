@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+    <link rel="stylesheet" href="style/register.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="register">
+
+<nav class="navbar">
+    <ul>
+        <li><a href="home.php" class="cv"><img class="icon" src="pics/home.png" height="28" width="28"></a></li>
+        <li><a href="register.html">Registration</a></li>
+        <li><a href="signin.html">Sign In</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li class="right"><a href="profile.html"><img class="user-settings" src="pics/user.png" height="28" width="28"/></a></li>
+    </ul>
+</nav>
+
+<main>
+    <div class="form-box">
+        <h2>Create Account</h2>
+
+        <input id="email" type="email" placeholder="Email" />
+        <input id="password" type="password" placeholder="Password" />
+
+        <button id="registerBtn" class="primary">Register</button>
+        <button id="gotoSigninBtn" class="secondary">I already have an account</button>
+
+        <p id="msg"></p>
+    </div>
+</main>
+
+<script>
+    axios.defaults.baseURL = 'http://localhost:8080';
+    axios.defaults.withCredentials = true;
+
+    const emailEl = document.getElementById('email');
+    const passEl  = document.getElementById('password');
+    const msg     = document.getElementById('msg');
+
+    document.getElementById('registerBtn').addEventListener('click', async () => {
+        const email = emailEl.value;
+        const password = passEl.value;
+
+        const res = await axios.post('/auth/register', { email, password });
+        msg.textContent = res.data.message || 'Registered successfully.';
+
+        if (res.status === 200) {
+            setTimeout(() => window.location.href = 'signin.html', 1500);
+        }
+    });
+
+    document.getElementById('gotoSigninBtn').addEventListener('click', () => {
+        const email = emailEl.value.trim();
+        window.location.href = email ? `signin.html?email=${encodeURIComponent(email)}` : 'signin.html';
+    });
+</script>`
+</body>
+</html>

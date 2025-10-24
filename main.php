@@ -1,9 +1,9 @@
 <?php
 session_start(); // ← musi być na samym początku!
 
-$nr_indeksu = '1234567';
-$nrGrupy = 'X';
-echo 'Jan Kowalski ' . $nr_indeksu . ' grupa ' . $nrGrupy . '<br><br>';
+$nr_indeksu = '175675';
+$nrGrupy = 'ISI3';
+echo 'Igor Barcikowski ' . $nr_indeksu . ' grupa ' . $nrGrupy . '<br><br>';
 
 // a) include(), require_once()
 echo 'a) include(), require_once()<br>';

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="style/profile.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <ul>
+        <li><a href="home.php" class="cv"><img class="icon" src="pics/home.png" height="28" width="28" ></a></li>
+        <li><a href="register.html">Registration</a></li>
+        <li><a href="signin.html">Sign In</a></li>
+        <li><a href="events.html">Events</a> </li>
+        <li class="right"><a href="profile.html"><img class="user-settings" src="pics/user.png" height="28" width="28"/></a></li>
+    </ul>
+</nav>
+
+<main>
+    <section>
+        <button class="create-btn" onclick="window.location.href='create-athlete.html'">
+            Create/Edit Athlete
+        </button>
+        <a href="clubs.html" class="clubs">Clubs</a>
+        <button class="create-btn" onclick="window.location.href='club-enrollments.html'">
+            Show pending enrollments
+        </button>
+    </section>
+
+
+
+    <!-- My Athlete card -->
+    <section class="card" id="athleteCard">
+        <h2>My Athlete</h2>
+        <p id="athleteStatus" class="muted">Loading your athlete...</p>
+
+        <div id="athleteRows" class="hidden">
+            <div class="row"><span class="label">ID</span><span class="value" id="a_id">—</span></div>
+            <div class="row"><span class="label">First name</span><span class="value" id="a_fn">—</span></div>
+            <div class="row"><span class="label">Last name</span><span class="value" id="a_ln">—</span></div>
+            <div class="row"><span class="label">Date of birth</span><span class="value" id="a_dob">—</span></div>
+            <div class="row"><span class="label">Role</span><span class="value" id="a_role">—</span></div>
+        </div>
+
+        <div class="actions">
+            <button class="ghost-btn" id="retryBtn" onclick="loadAthlete()">Retry</button>
+            <button class="ghost-btn" onclick="window.location.href='create-athlete.html'">Create / Edit</button>
+        </div>
+    </section>
+
+    <li class="right">
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </li>
+
+</main>
+
+
+<script>
+        axios.defaults.baseURL = 'http://localhost:8080';
+        axios.defaults.withCredentials = true; // send JSESSIONID
+
+        async function loadAthlete() {
+        const status = document.getElementById('athleteStatus');
+        const rows   = document.getElementById('athleteRows');
+
+        status.className = 'muted';
+        status.textContent = 'Loading your athlete...';
+        rows.classList.add('hidden');
+
+        try {
+        const res = await axios.get('/athlete/me', { headers: { Accept: 'application/json' } });
+
+        const data = res.data;
+        document.getElementById('a_id').textContent   = data.id ?? '—';
+        document.getElementById('a_fn').textContent   = data.firstName ?? '—';
+        document.getElementById('a_ln').textContent   = data.lastName ?? '—';
+        document.getElementById('a_dob').textContent  = data.dateOfBirth ?? '—';
+        document.getElementById('a_role').textContent = data.role ?? '—';
+
+        rows.classList.remove('hidden');
+        status.className = 'ok';
+        status.textContent = 'Loaded.';
+
+    } catch (err) {
+        const s = err.response?.status;
+        if (s === 401 || s === 403) {
+        status.className = 'error';
+        status.textContent = 'You are not signed in. Please sign in to see your athlete.';
+        return;
+    }
+        if (s === 404) {
+        status.className = 'muted';
+        status.innerHTML = 'No athlete linked to this account yet. Click <b>Create / Edit</b> to add one.';
+        return;
+    }
+        status.className = 'error';
+        status.textContent = 'Failed to load athlete (' + (s || err.message) + ')';
+    }
+    }
+
+        document.getElementById('retryBtn').addEventListener('click', loadAthlete);
+        document.addEventListener('DOMContentLoaded', loadAthlete);
+</script>
+
+<script>
+    async function logout() {
+        try {
+            await axios.post('auth/logout', {}, { withCredentials: true });
+            alert('You have been logged out.');
+            window.location.href = 'signin.html';
+        } catch (err) {
+            alert('Logout failed: ' + (err.response?.status || err.message));
+        }
+    }
+</script>
+
+
+</body>
+</html>

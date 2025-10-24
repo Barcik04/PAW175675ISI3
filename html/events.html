@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Events</title>
+    <link rel="stylesheet" href="../style/events.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+    <ul>
+        <li><a href="home.php" class="cv"><img class="icon" src="../pics/home.png" height="28" width="28"></a></li>
+        <li><a href="register.html">Registration</a></li>
+        <li><a href="signin.html">Sign In</a></li>
+        <li><a href="events.html" class="active">Events</a></li>
+        <li class="right"><a href="profile.html"><img class="user-settings" src="../pics/user.png" height="28" width="28"></a></li>
+    </ul>
+</nav>
+
+<main class="wrap">
+    <h1>Upcoming events</h1>
+    <ul id="events" class="event-list"></ul>
+</main>
+
+<script>
+    axios.defaults.baseURL = 'http://localhost:8080';
+    axios.defaults.withCredentials = true;
+
+    async function loadEvents() {
+        try {
+            const res = await axios.get('/event');
+            const events = res.data;
+            const ul = document.getElementById('events');
+
+            if (!events.length) {
+                ul.innerHTML = `<li>No events yet.</li>`;
+                return;
+            }
+
+            ul.innerHTML = events.map(ev => `
+        <li class="event-row">
+          <a class="event-link" href="event.html?id=${encodeURIComponent(ev.id)}">
+            <span class="title">${ev.name}</span>
+            <span class="date">${ev.date}</span>
+          </a>
+        </li>
+      `).join('');
+        } catch (err) {
+            document.getElementById('events').innerHTML =
+                `<li>Failed to load events (${err.response?.status || err.message})</li>`;
+        }
+    }
+
+    loadEvents();
+</script>
+
+</body>
+</html>

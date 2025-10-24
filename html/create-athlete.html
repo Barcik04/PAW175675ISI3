@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Create My Athlete</title>
+    <link rel="stylesheet" href="../style/create-athlete.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar">
+    <ul>
+        <li><a href="home.php" class="cv"><img class="icon" src="../pics/home.png" height="28" width="28" ></a></li>
+        <li><a href="register.html">Registration</a></li>
+        <li><a href="signin.html">Sign In</a></li>
+        <li><a href="events.html">Events</a> </li>
+        <li class="right"><a href="profile.html"><img class="user-settings" src="../pics/user.png" height="28" width="28"/></a></li>
+    </ul>
+</nav>
+
+<div class="box">
+    <h3>Insert you Data</h3>
+
+    <!-- Adjust fields to match your Athlete DTO -->
+    <label for="firstName"></label><input id="firstName" type="text" placeholder="First name" />
+    <label for="lastName"></label><input id="lastName" type="text" placeholder="Last name" />
+    <label for="dob"></label><input id="dob" type="date" placeholder="Date of birth" />
+    <label for="role"></label>
+    <select id="role">
+        <option value="USER">USER</option>
+        <option value="COACH">COACH</option>
+    </select>
+
+    <button id="createBtn">Create Athlete</button>
+    <div id="msg"></div>
+
+</div>
+
+<script>
+    // Axios base
+    axios.defaults.baseURL = 'http://localhost:8080';
+    axios.defaults.withCredentials = true;
+
+    // read CSRF cookie
+    const xsrf = () => {
+        const c = document.cookie.split('; ').find(s => s.startsWith('XSRF-TOKEN='));
+        return c ? decodeURIComponent(c.split('=')[1]) : null;
+    };
+
+    const $ = id => document.getElementById(id);
+    const endpoint = '/athlete/me';
+    let mode = 'post';
+
+
+
+    function val(id) {
+        const v = $(id).value.trim();
+        return v === '' ? null : v;
+        // input[type=date] returns yyyy-mm-dd (valid for LocalDate)
+    }
+
+    async function logoutAndRedirect(msgText) {
+        const t = xsrf();
+        try {
+            await axios.post('/logout', null, {
+                headers: { 'X-XSRF-TOKEN': t }
+            });
+        } catch (_) {
+            // ignore – we'll redirect anyway
+        }
+        // Show a quick message and send them to signin
+        alert(msgText || 'Please sign in again.');
+        window.location.href = 'signin.html';
+    }
+
+    $('createBtn').addEventListener('click', async () => {
+        $('msg').textContent = '';
+
+        const payload = {
+            firstName: val('firstName'),
+            lastName: val('lastName'),
+            dateOfBirth: val('dob'),
+            role: val('role')
+        };
+
+        const headers = { 'Content-Type': 'application/json', Accept: 'application/json' };
+        const t = xsrf();
+        if (t) headers['X-XSRF-TOKEN'] = t;
+
+        try {
+            const res = await axios.patch(endpoint, payload, { headers });
+            const a = res.data || {};
+
+            if (mode === 'post') {
+                // created a brand-new athlete -> force relogin
+                await logoutAndRedirect('Your athlete is created! ``Please sign in again.');
+                return; // stop further UI updates
+            }
+
+            // otherwise it was an update
+            $('msg').textContent = 'Saved ✅';
+            $('firstName').value = a.firstName ?? $('firstName').value;
+            $('lastName').value  = a.lastName ?? $('lastName').value;
+            $('dob').value       = (a.dateOfBirth ?? $('dob').value).slice(0, 10);
+            $('role').value      = a.role ?? $('role').value;
+            mode = 'patch';
+            $('createBtn').textContent = 'Save changes';
+        } catch (err) {
+            const s = err.response?.status;
+            $('msg').textContent = 'Save failed (' + (s ?? err.message) + ')';
+        }
+    });
+</script>
+
+
+
+</body>
+</html>

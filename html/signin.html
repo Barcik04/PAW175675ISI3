@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Sign in</title>
+    <link rel="stylesheet" href="style/signin.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="signin">
+
+<nav class="navbar">
+    <ul>
+        <li><a href="home.php" class="cv"><img class="icon" src="pics/home.png" height="28" width="28"></a></li>
+        <li><a href="register.html">Registration</a></li>
+        <li><a href="signin.html">Sign In</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li class="right"><a href="profile.html"><img class="user-settings" src="pics/user.png" height="28" width="28"/></a></li>
+    </ul>
+</nav>
+
+<div class="box">
+    <h3>Sign in</h3>
+    <input id="email" type="email" placeholder="Email" />
+    <input id="password" type="password" placeholder="Password" />
+    <button id="gotoRegisterBtn" style="margin-top:8px;background:#94a3b8">I don't have an account</button>
+    <button id="signinBtn">Sign in</button>
+    <div id="msg"></div>
+</div>
+
+<script>
+    axios.defaults.baseURL = 'http://localhost:8080';
+    axios.defaults.withCredentials = true; // use cookies
+
+    const emailEl = document.getElementById('email');
+    const passEl  = document.getElementById('password');
+    const msg     = document.getElementById('msg');
+
+    // prefill email from query param (optional)
+    const params = new URLSearchParams(location.search);
+    if (params.get('email')) emailEl.value = params.get('email');
+
+    document.getElementById('signinBtn').addEventListener('click', async () => {
+        const email = emailEl.value;
+        const password = passEl.value;
+
+        // Spring expects form-encoded login
+        const params = new URLSearchParams();
+        params.append('email', email);
+        params.append('password', password);
+
+        // POST to /auth/login (handled by Spring Security formLogin)
+        const res = await axios.post('/auth/login', params, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        });
+
+        // if success -> redirect
+        if (res.status === 204) {
+            msg.textContent = 'Logged in!...';
+            setTimeout(() => {
+                window.location.href = 'home.html';
+            }, 600);
+        } else {
+            msg.textContent = 'Login failed';
+        }
+    });
+
+    document.getElementById('gotoRegisterBtn').addEventListener('click', () => {
+        const email = emailEl.value.trim();
+        window.location.href = email ? `register.html?email=${encodeURIComponent(email)}` : 'register.html';
+    });
+</script>
+
+</body>
+</html>

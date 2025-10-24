@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Events</title>
+    <link rel="stylesheet" href="../style/create-club.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+    <ul>
+        <li><a href="home.php" class="cv"><img class="icon" src="../pics/home.png" height="28" width="28"></a></li>
+        <li><a href="register.html">Registration</a></li>
+        <li><a href="signin.html">Sign In</a></li>
+        <li><a href="events.html" class="active">Events</a></li>
+        <li class="right"><a href="profile.html"><img class="user-settings" src="../pics/user.png" height="28" width="28"></a></li>
+    </ul>
+</nav>
+
+<div class="box">
+    <h2>Create Club</h2>
+    <input id="clubName" type="text" placeholder="Enter club name" />
+    <button id="createBtn">Create</button>
+    <div id="msg" class="msg"></div>
+</div>
+
+<script>
+    axios.defaults.baseURL = 'http://localhost:8080';
+    axios.defaults.withCredentials = true;
+
+    const xsrf = () => (document.cookie.split('; ').find(s=>s.startsWith('XSRF-TOKEN='))||'').split('=')[1] || '';
+    const nameInput = document.getElementById('clubName');
+    const btn = document.getElementById('createBtn');
+    const msg = document.getElementById('msg');
+
+    btn.addEventListener('click', async () => {
+        const name = nameInput.value.trim();
+        if (!name) {
+            msg.textContent = 'Please enter a club name.';
+            msg.className = 'msg err';
+            return;
+        }
+
+        btn.disabled = true;
+        msg.textContent = 'Creating…';
+        msg.className = 'msg';
+
+        try {
+            await axios.post('/club', { name }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-XSRF-TOKEN': xsrf()
+                }
+            });
+            msg.textContent = 'Club created successfully ✔';
+            msg.className = 'msg ok';
+            nameInput.value = '';
+        } catch (e) {
+            const s = e.response?.status;
+            msg.textContent = s===401
+                ? 'You must be logged in as a coach.'
+                : 'Error creating club.';
+            msg.className = 'msg err';
+        } finally {
+            btn.disabled = false;
+        }
+    });
+</script>
+</body>
+</html>

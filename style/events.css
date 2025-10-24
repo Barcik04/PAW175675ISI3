@@ -1,0 +1,131 @@
+/* ========== Create Athlete page (scoped) ========== */
+:root{
+    --bg:#0f172a;
+    --panel:#1e293b;
+    --fg:#ffffff;
+    --muted:rgba(182,185,197,.68);
+    --accent:#38bdf8;
+    --hairline:rgba(255,255,255,0.1);
+}
+
+/* Page base */
+html, body { height: 100%; }
+body{
+    margin:0;
+    font-family: sans-serif;
+    color:var(--fg);
+    background:var(--bg);
+    display:flex;
+    flex-direction:column;
+}
+
+/* NAVBAR */
+.navbar{
+    background:var(--bg);
+    border-bottom:1px solid var(--hairline);
+    padding:18px 0;
+}
+.navbar ul{
+    display:flex;
+    gap:40px;
+    align-items:center;
+    list-style:none;
+    margin:0;
+    padding:0 20px;
+}
+.navbar a{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    text-decoration:none;
+    color:var(--muted);
+    font-size:18px;
+    transition:transform .2s ease, color .2s ease, opacity .2s ease;
+}
+.navbar a:hover{ transform:scale(1.05); color:#fff; }
+.icon{ filter:brightness(0) invert(1); }
+
+/* CARD */
+.box{
+    background:var(--panel);
+    width:min(500px, 92vw);
+    margin:48px auto;                 /* centered under navbar */
+    padding:30px 40px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.box h3{ margin:0 0 12px; }
+
+/* Inputs */
+.box input,
+.box select{
+    display:block;
+    width:260px;
+    margin:10px auto 6px;
+    padding:10px 12px;
+    border:none;
+    border-radius:8px;
+    background:#0b172a;
+    color:#e5e7eb;
+    outline:none;
+    transition: box-shadow .2s ease, background .2s ease;
+}
+.box input:focus,
+.box select:focus{
+    box-shadow:0 0 0 2px rgba(56,189,248,.5);
+    background:#0e2139;
+}
+
+/* Buttons */
+.box button{
+    display:block;
+    width:260px;
+    margin:12px auto 0;
+    padding:10px 12px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:700;
+    background:var(--accent);
+    color:#000;
+    transition: transform .1s ease, opacity .2s ease, box-shadow .2s ease;
+}
+.box button:hover{ transform:translateY(-1px); box-shadow:0 6px 16px rgba(56,189,248,.3); }
+.box button:active{ transform:translateY(0); }
+.box button:disabled{ opacity:.6; cursor:not-allowed; }
+
+/* Messages */
+#msg{ min-height:20px; margin-top:10px; font-size:14px; }
+.ok{ color:#86efac; }
+.err{ color:#fca5a5; }
+
+/* Small screens */
+@media (max-width: 420px){
+    .navbar ul{ gap:22px; }
+    .box{ padding:22px; }
+    .box input, .box select, .box button{ width:100%; }
+}
+
+.navbar li.right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.user-settings {
+    vertical-align: middle;
+    cursor: pointer;
+    filter: brightness(0) invert(1);
+}
+
+.wrap { max-width:900px; margin:40px auto; padding:0 16px; }
+.event-list { list-style:none; margin:0; padding:0; }
+.event-row { border:1px solid rgba(148,163,184,.25); border-radius:12px; margin-bottom:12px; }
+.event-link { display:flex; justify-content:space-between; padding:14px 16px; color:#fff; }
+.event-link:hover { background:rgba(56,63,79,.35); }
+.event-card { border:1px solid rgba(148,163,184,.25); border-radius:12px; padding:18px; }
+button { background:#38bdf8; color:#001018; border:none; padding:10px 16px; border-radius:10px; cursor:pointer; }
+button:disabled { opacity:.6; cursor:not-allowed; transition: transform .1s ease, opacity .2s ease, box-shadow .2s ease;}
+button:hover { transform:translateY(-1px); box-shadow:0 3px 6px rgba(56,189,248,.5); }
+.status { margin-top:10px; color:#cbd5e1; }

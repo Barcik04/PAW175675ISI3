@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Events</title>
+    <link rel="stylesheet" href="../style/clubs.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<nav class="navbar">
+    <ul>
+        <li><a href="home.php" class="cv"><img class="icon" src="../pics/home.png" height="28" width="28"></a></li>
+        <li><a href="register.html">Registration</a></li>
+        <li><a href="signin.html">Sign In</a></li>
+        <li><a href="events.html" class="active">Events</a></li>
+        <li class="right"><a href="profile.html"><img class="user-settings" src="../pics/user.png" height="28" width="28"></a></li>
+    </ul>
+</nav>
+
+<li><button class="create-club-btn" onclick="window.location.href='create-club.html'">Create Club</button></li>
+
+    <main class="wrap">
+        <h1 class="page-title">Clubs</h1>
+        <ul id="clubs" class="club-list"></ul>
+    </main>
+
+<script>
+    axios.defaults.baseURL = 'http://localhost:8080';
+    axios.defaults.withCredentials = true;
+
+    const clubsEl = document.getElementById('clubs');
+    const xsrf = () => (document.cookie.split('; ').find(s=>s.startsWith('XSRF-TOKEN='))||'').split('=')[1] || '';
+    const esc  = s => String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+
+    async function loadClubs(){
+        clubsEl.innerHTML = '<li class="club-card">Loading…</li>';
+        try{
+            const {data} = await axios.get('/club',{headers:{Accept:'application/json'}});
+            clubsEl.innerHTML = (data||[]).map(c => `
+      <li class="club-card" id="club-${c.id}">
+        ${c.name ? `<h3>${esc(c.name)}</h3>` : ''}
+        ${c.description ? `<p>${esc(c.description)}</p>` : ''}
+        <div class="club-actions">
+          <button class="btn join" data-id="${c.id}">Request to join</button>
+          <button class="btn show" data-id="${c.id}">Show athletes</button>
+        </div>
+        <ul class="athletes" id="athletes-${c.id}" style="list-style:none; padding:6px 0 0; margin:0;"></ul>
+        <span class="msg" id="m-${c.id}"></span>
+      </li>`).join('') || '<li class="club-card">No clubs found.</li>';
+        }catch(e){
+            const s = e.response?.status;
+            clubsEl.innerHTML = `<li class="club-card"><span class="msg error">${
+                s===401?'You must be logged in.':s===403?'Forbidden.':`Error loading clubs (${s??'unknown'})```
+            }</span></li>`;
+        }
+    }
+
+    // handle both buttons
+    clubsEl.addEventListener('click', async (e)=>{
+        const btn = e.target.closest('button'); if(!btn) return;
+        const id = btn.dataset.id;
+
+        // Request to join
+        if (btn.classList.contains('join')) {
+            const msg = document.getElementById(`m-${id}`);
+            btn.disabled = true; msg.textContent = 'Sending…'; msg.className = 'msg';
+            try{
+                await axios.post(`/club-enrollment/${id}`, null, {headers:{Accept:'application/json','X-XSRF-TOKEN':xsrf()}});
+                msg.textContent = 'Request sent ✔'; msg.className = 'msg ok'; btn.textContent = 'Requested';
+            }catch(e){
+                const s = e.response?.status;
+                msg.textContent = s===401?'Not logged in.':s===403?'Forbidden.':s===404?'Club not found.':s===409?'Already requested/member.':'Failed.';
+                msg.className = 'msg error'; btn.disabled = false;
+            }
+        }
+
+        // Show athletes
+        if (btn.classList.contains('show')) {
+            const list = document.getElementById(`athletes-${id}`);
+            list.innerHTML = '<li style="opacity:.7;">Loading athletes…</li>';
+            try {
+                const { data } = await axios.get(`/athlete/${id}`, { headers:{Accept:'application/json'} });
+                if (!data.length) {
+                    list.innerHTML = '<li style="opacity:.7;">No athletes in this club.</li>';
+                    return;
+                }
+                list.innerHTML = data.map(a => `
+        <li style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,.08);">
+          ${esc(a.firstName)} ${esc(a.lastName)}
+        </li>`).join('');
+            } catch(e) {
+                list.innerHTML = `<li style="color:#fca5a5;">Error loading athletes.</li>`;
+            }
+        }
+    });
+
+    loadClubs();
+</script>
+
+
+</body>
+</html>
