@@ -372,3 +372,24 @@ iframe {
     border-radius: 10px;
     border: none;
 }
+
+.contact-form {
+    max-width: 480px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    background-color: #f6f6f6;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 6px 8px;
+}

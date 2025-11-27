@@ -1,5 +1,7 @@
 <?php
 require_once "cfg.php";
+require_once __DIR__ . '/contact.php';
+
 
 error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
@@ -29,13 +31,39 @@ if ($page == '') {
         <li><a href="index.php?page=stack">Stack</a></li>
         <li><a href="index.php?page=experience">Experience</a></li>
         <li><a href="index.php?page=projects">Projects</a></li>
-        <li><a href="index.php?page=contact">Contact</a></li>
+        <li><a href="index.php?page=contact2">Contact</a></li>
+        <li><a href="index.php?page=contact">ContactForm</a></li>
         <li><a href="admin/admin.php">Admin</a></li>
     </ul>
 </nav>
 
 <main>
-    <?php include "showpage.php"; ?>
+    <?php
+    switch ($page) {
+
+        case 'contact':
+            $info = "";
+
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $action = $_POST['action'] ?? '';
+
+                if ($action === 'send') {
+                    $info = WyslijMailKontakt();
+                } elseif ($action === 'remind') {
+                    $info = PrzypomnijHaslo();
+                }
+            }
+
+            // rysujemy nasze formularze
+            PokazKontakt($info);
+            break;
+
+        default:
+            // normalnie wczytujemy HTML z bazy
+            include __DIR__ . "/showpage.php";
+            break;
+    }
+    ?>
 </main>
 
 </body>
