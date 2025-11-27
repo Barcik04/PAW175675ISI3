@@ -66,6 +66,14 @@ if ($_SESSION['zalogowany'] !== true) {
     exit;
 }
 
+// Obsługa zapisu zmian w edycji
+if (isset($_POST['save']) && isset($_POST['id'])) {
+    $id = (int)$_POST['id'];
+    ZapiszPodstrone($id);
+    exit;
+}
+
+
 // Obsługa kliknięcia "Edytuj" – pokaż formularz edycji zamiast listy
 if (isset($_POST['edit']) && isset($_POST['id'])) {
     $id = (int)$_POST['id'];
@@ -143,7 +151,7 @@ function ListaPodstron(): void
 
 
 
-function EdytujPodstrone(int $id): void
+function EdytujPodstrone(int $id, array $prefill = []): void
 {
     global $conn;
 
@@ -158,10 +166,17 @@ function EdytujPodstrone(int $id): void
         return;
     }
 
-    $row         = mysqli_fetch_assoc($result);
-    $alias       = htmlspecialchars($row['alias']);
-    $pageContent = htmlspecialchars($row['page_content']);
-    $status      = (int)$row['status']; // 1 = aktywna, 0 = nieaktywna
+    $row = mysqli_fetch_assoc($result);
+
+    $aliasSource       = $prefill['alias'] ?? $row['alias'];
+    $pageContentSource = $prefill['page_content'] ?? $row['page_content'];
+    $statusSource      = array_key_exists('status', $prefill)
+        ? (int)$prefill['status']
+        : (int)$row['status'];
+
+    $alias       = htmlspecialchars($aliasSource);
+    $pageContent = htmlspecialchars($pageContentSource);
+    $status      = $statusSource;
 
     echo '<h2>Edycja podstrony</h2>';
     echo '<form method="post" action="admin.php">';
@@ -192,6 +207,44 @@ function EdytujPodstrone(int $id): void
     echo '<p><input type="submit" name="save" value="Zapisz zmiany"></p>';
     echo '</form>';
 }
+
+
+function ZapiszPodstrone(int $id): void
+{
+    global $conn;
+
+    $id = (int)$id;
+    $alias       = trim($_POST['alias'] ?? "");
+    $pageContent = trim($_POST['page_content'] ?? "");
+    $status      = isset($_POST['status']) ? 1 : 0;
+
+    if ($alias === '') {
+        echo "<p style='color:red;font-weight:bold;'>Alias (tytuł) nie może być pusty.</p>";
+        EdytujPodstrone($id, $_POST);
+        return;
+    }
+
+    $aliasEsc   = mysqli_real_escape_string($conn, $alias);
+    $contentEsc = mysqli_real_escape_string($conn, $pageContent);
+
+    $query = "
+        UPDATE page_list
+        SET alias = '$aliasEsc', page_content = '$contentEsc', status = $status
+        WHERE id = $id
+        LIMIT 1
+    ";
+
+    if (mysqli_query($conn, $query)) {
+        echo "<p>Podstrona została zaktualizowana.</p>";
+        echo "<p><a href='admin.php'>Wróć do listy podstron</a></p>";
+    } else {
+        echo "<p style='color:red;'>Błąd podczas zapisywania: "
+            . htmlspecialchars(mysqli_error($conn)) . "</p>";
+        EdytujPodstrone($id, $_POST);
+    }
+}
+
+
 
 function DodajNowaPodstrone(): void
 {
@@ -285,6 +338,7 @@ function UsunPodstrone(int $id): void
 echo "<h1>Panel administracyjny (wersja {$version})</h1>";
 echo "<p>Jesteś zalogowany jako <strong>" . htmlspecialchars($login) . "</strong>.</p>";
 echo '<p><a href="admin.php?logout=1">Wyloguj</a></p>';
+echo '<p><a href="../index.php" style="font-weight:bold;">← Powrót na stronę główną</a></p>';
 
 echo "<hr>";
 ListaPodstron();

@@ -8,7 +8,7 @@ function PokazKontakt(string $komunikat = ""): void
         echo '<p class="info" style="color:red;font-weight:bold;">'.$komunikat.'</p>';
     }
 
-    echo '
+    echo <<<HTML
     <h2>Formularz kontaktowy</h2>
 
     <form class="contact-form" method="post" action="index.php?page=contact">
@@ -40,7 +40,7 @@ function PokazKontakt(string $komunikat = ""): void
       
         <button type="submit" name="action" value="send">Wyślij</button>
     </form>
-
+    
 
 
     <h3>Przypomnienie hasła do panelu admina</h3>
@@ -52,7 +52,7 @@ function PokazKontakt(string $komunikat = ""): void
 
         <button type="submit" name="action" value="remind">Przypomnij hasło</button>
     </form>
-    ';
+    HTML;
 
 }
 
