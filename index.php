@@ -59,6 +59,10 @@ if ($page == '') {
             PokazKontakt($info);
             break;
 
+        case 'categories':
+            include __DIR__ . '/categories.php';
+            break;
+
         default:
             // normalnie wczytujemy HTML z bazy
             include __DIR__ . "/showpage.php";
