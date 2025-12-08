@@ -33,6 +33,7 @@ if ($page == '') {
         <li><a href="index.php?page=projects">Projects</a></li>
         <li><a href="index.php?page=contact2">Contact</a></li>
         <li><a href="index.php?page=contact">ContactForm</a></li>
+        <li><a href="index.php?page=categories">Zarządzaj kategoriami</a></li>
         <li><a href="admin/admin.php">Admin</a></li>
     </ul>
 </nav>
