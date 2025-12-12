@@ -35,6 +35,7 @@ if ($page == '') {
         <li><a href="index.php?page=contact">ContactForm</a></li>
         <li><a href="index.php?page=categories">Zarządzaj kategoriami</a></li>
         <li><a href="index.php?page=products">Produkty</a></li>
+        <li><a href="index.php?page=shop">Sklep</a></li>
         <li><a href="admin/admin.php">Admin</a></li>
     </ul>
 </nav>
@@ -67,6 +68,11 @@ if ($page == '') {
         case 'products':
             include __DIR__ . '/products.php';
             break;
+
+        case 'shop':
+            include __DIR__ . '/shop.php';
+            break;
+
 
         default:
             // normalnie wczytujemy HTML z bazy
