@@ -34,6 +34,7 @@ if ($page == '') {
         <li><a href="index.php?page=contact2">Contact</a></li>
         <li><a href="index.php?page=contact">ContactForm</a></li>
         <li><a href="index.php?page=categories">Zarządzaj kategoriami</a></li>
+        <li><a href="index.php?page=products">Produkty</a></li>
         <li><a href="admin/admin.php">Admin</a></li>
     </ul>
 </nav>
@@ -61,6 +62,10 @@ if ($page == '') {
 
         case 'categories':
             include __DIR__ . '/categories.php';
+            break;
+
+        case 'products':
+            include __DIR__ . '/products.php';
             break;
 
         default:
